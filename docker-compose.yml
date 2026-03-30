@@ -9,10 +9,10 @@ services:
       DATABASE_URL: postgres://umami:${POSTGRES_PASSWORD}@db:5432/umami
       DATABASE_TYPE: postgres
       APP_SECRET: ${APP_SECRET}
-      DISABLE_TELEMETRY: 1
-      DISABLE_UPDATES: 1
-      REMOVE_TRAILING_SLASH: 1
-      IGNORE_IP: ${IGNORE_IP:-}
+      DISABLE_TELEMETRY: '1'
+      DISABLE_UPDATES: '1'
+      REMOVE_TRAILING_SLASH: '1'
+
     depends_on:
       db:
         condition: service_healthy

@@ -24,9 +24,8 @@ docker compose up -d
 | `POSTGRES_PASSWORD` | — | **Required.** PostgreSQL password |
 | `UMAMI_VERSION` | `3.0.3` | Umami Docker image tag |
 | `UMAMI_PORT` | `3000` | Host port to expose |
-| `DISABLE_UPDATES` | `0` | Set `1` to disable update check |
-| `REMOVE_TRAILING_SLASH` | `1` | Treat `/page` and `/page/` as same URL |
-| `IGNORE_IP` | — | Comma-separated IPs to exclude from tracking |
+
+
 | `TRACKER_SCRIPT_NAME` | — | Custom script name to [bypass ad blockers](#bypassing-ad-blockers) |
 | `COLLECT_API_ENDPOINT` | — | Custom collect endpoint to [bypass ad blockers](#bypassing-ad-blockers) |
 | `POSTGRES_VERSION` | `16-alpine` | PostgreSQL Docker image tag |
@@ -93,7 +92,6 @@ docker compose pull umami && docker compose up -d umami
 
 - [ ] Change default admin password after first login
 - [ ] Set strong `APP_SECRET` and `POSTGRES_PASSWORD`
-- [ ] Set `IGNORE_IP` to exclude your own IPs
 - [ ] Place behind HTTPS reverse proxy (Coolify/Nginx/Caddy)
 - [ ] Don't expose PostgreSQL port to the host
 - [ ] Keep `UMAMI_VERSION` and `POSTGRES_VERSION` up to date
