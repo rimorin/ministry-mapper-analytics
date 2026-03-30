@@ -1,0 +1,66 @@
+services:
+  umami:
+    image: 'ghcr.io/umami-software/umami:3.0.3'
+    init: true
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    environment:
+      DATABASE_URL: postgres://umami:${POSTGRES_PASSWORD}@db:5432/umami
+      DATABASE_TYPE: postgres
+      APP_SECRET: ${APP_SECRET}
+      DISABLE_TELEMETRY: 1
+      DISABLE_UPDATES: 1
+      REMOVE_TRAILING_SLASH: 1
+      IGNORE_IP: ${IGNORE_IP:-}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/api/heartbeat"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "${UMAMI_CPU_LIMIT:-0.25}"
+          memory: ${UMAMI_MEMORY_LIMIT:-256M}
+        reservations:
+          cpus: "${UMAMI_CPU_RESERVATION:-0.1}"
+          memory: ${UMAMI_MEMORY_RESERVATION:-128M}
+
+  db:
+    image: 'postgres:16-alpine'
+    restart: unless-stopped
+    shm_size: ${POSTGRES_SHM_SIZE:-128m}
+    volumes:
+      - umami-db-data:/var/lib/postgresql/data
+    command: >
+      postgres
+      -c shared_buffers=${POSTGRES_SHARED_BUFFERS:-32MB}
+      -c work_mem=${POSTGRES_WORK_MEM:-1MB}
+      -c maintenance_work_mem=${POSTGRES_MAINTENANCE_WORK_MEM:-16MB}
+      -c effective_cache_size=${POSTGRES_EFFECTIVE_CACHE_SIZE:-128MB}
+      -c max_connections=${POSTGRES_MAX_CONNECTIONS:-30}
+    environment:
+      POSTGRES_DB: umami
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      TZ: UTC
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U umami -d umami"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "${DB_CPU_LIMIT:-0.25}"
+          memory: ${DB_MEMORY_LIMIT:-256M}
+        reservations:
+          cpus: "${DB_CPU_RESERVATION:-0.1}"
+          memory: ${DB_MEMORY_RESERVATION:-64M}
+
+volumes:
+  umami-db-data:
