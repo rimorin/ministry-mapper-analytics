@@ -3,8 +3,6 @@ services:
     image: 'ghcr.io/umami-software/umami:3.0.3'
     init: true
     restart: unless-stopped
-    ports:
-      - '3000:3000'
     environment:
       DATABASE_URL: postgres://umami:${POSTGRES_PASSWORD}@db:5432/umami
       DATABASE_TYPE: postgres

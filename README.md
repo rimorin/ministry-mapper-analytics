@@ -13,7 +13,7 @@ openssl rand -hex 32  # → APP_SECRET
 openssl rand -hex 16  # → POSTGRES_PASSWORD
 
 docker compose up -d
-# Open http://localhost:3000 — login: admin / umami (change immediately)
+# Access via your Coolify-assigned domain — login: admin / umami (change immediately)
 ```
 
 ## Environment Variables
